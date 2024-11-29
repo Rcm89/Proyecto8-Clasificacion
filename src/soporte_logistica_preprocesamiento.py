@@ -150,13 +150,13 @@ class Visualizador:
             fig.delaxes(axes[-1])
 
 
-    def plot_relacion(self, vr, tamano_grafica=(40, 12)):
+    def plot_relacion(self, vr, tamano_grafica=(20, 10), tamanio_fuente=18):
 
 
         lista_num = self.separar_dataframes()[0].columns
         lista_cat = self.separar_dataframes()[1].columns
 
-        fig, axes = plt.subplots(3, int(len(self.dataframe.columns) / 3), figsize=tamano_grafica)
+        fig, axes = plt.subplots(ncols = 2, nrows = math.ceil(len(self.dataframe.columns) / 2), figsize=tamano_grafica)
         axes = axes.flat
 
         for indice, columna in enumerate(self.dataframe.columns):
@@ -167,7 +167,7 @@ class Visualizador:
                              hue = vr, 
                              data = self.dataframe, 
                              ax = axes[indice], 
-                             palette = "magma", 
+                             palette = "mako", 
                              legend = False)
                 
             elif columna in lista_cat:
@@ -178,7 +178,7 @@ class Visualizador:
                               palette = "magma"
                               )
 
-            axes[indice].set_title(f"Relación {columna} vs {vr}")   
+            axes[indice].set_title(f"Relación {columna} vs {vr}",size=tamanio_fuente)   
 
         plt.tight_layout()
     
