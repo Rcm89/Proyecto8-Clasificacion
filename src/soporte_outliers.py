@@ -244,3 +244,32 @@ class GestionOutliersMultivariados:
             data.loc[data['outlier'] == -1, col] = valor_imputacion
         
         return data.drop("outlier", axis = 1)    
+
+# Definimos una función que nos permita explorar outliers con Isolationforest con una lista de estimadores
+# en vez de con uno solo como la que tenemos definida dentro de la clase
+
+def outliers_isolation_forest(df, niveles_contaminacion, lista_estimadores):
+    """
+    Agrega columnas al DataFrame con la detección de outliers utilizando Isolation Forest
+    para diferentes niveles de contaminación y números de estimadores.
+
+    Parámetros:
+    - df (pd.DataFrame): El DataFrame de entrada.
+    - niveles_contaminacion (list): Lista de niveles de contaminación a probar (por ejemplo, [0.01, 0.05, 0.1]).
+    - lista_estimadores (list): Lista de cantidades de estimadores a probar (por ejemplo, [10, 100, 200]).
+
+    Returns:
+    - pd.DataFrame: DataFrame con nuevas columnas para cada configuración de Isolation Forest.
+    """
+    col_numericas = df.select_dtypes(include=np.number).columns
+    combinaciones = list(product(niveles_contaminacion, lista_estimadores))
+    for cont, esti in combinaciones:
+        ifo = IsolationForest(
+            n_estimators=esti,
+            contamination=cont,
+            n_jobs=-1
+        )
+
+        df[f"outliers_ifo_{cont}_{esti}"] = ifo.fit_predict(df[col_numericas])
+    
+    return df
