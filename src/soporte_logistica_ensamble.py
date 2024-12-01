@@ -41,7 +41,6 @@ from sklearn.model_selection import StratifiedKFold, cross_val_score, KFold
 from sklearn.preprocessing import KBinsDiscretizer
 
 
-
 class AnalisisModelosClasificacion:
     def __init__(self, dataframe, variable_dependiente):
         self.dataframe = dataframe
@@ -85,11 +84,10 @@ class AnalisisModelosClasificacion:
                 'min_samples_leaf': [1, 2, 4]
             },
             "random_forest": {
-                'n_estimators': [100, 300, 500],
-                'max_depth': [3, 5, 7, 10],
-                'min_samples_split': [5, 10, 15],
-                'min_samples_leaf': [3, 5, 10],
-                'max_samples': [0.5, 0.7, 0.9]
+                'n_estimators': [25, 50, 75],
+                'max_depth': [5, 10, 15, 20],
+                'min_samples_split': [1, 2, 5],
+                'min_samples_leaf': [2, 4, 6]
             },
             "gradient_boosting": {
                 'n_estimators': [100, 200],
@@ -323,3 +321,5 @@ def color_filas_por_modelo(row):
         return ["background-color: #b3d1ff; color: black"] * len(row)  
     
     return ["color: black"] * len(row)
+
+    
