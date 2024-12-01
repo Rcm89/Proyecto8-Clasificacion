@@ -42,28 +42,30 @@ from sklearn.preprocessing import KBinsDiscretizer
 
 
 class AnalisisModelosClasificacion:
-    def __init__(self, dataframe, variable_dependiente):
+    def __init__(self, dataframe, variable_dependiente, random_state=42):
         self.dataframe = dataframe
         self.variable_dependiente = variable_dependiente
+        self.random_state = random_state
         self.X = dataframe.drop(variable_dependiente, axis=1)
         self.y = dataframe[variable_dependiente]
         self.X_train, self.X_test, self.y_train, self.y_test = train_test_split(
-            self.X, self.y, train_size=0.8, random_state=42, shuffle=True
+            self.X, self.y, train_size=0.8, random_state=self.random_state, shuffle=True
         )
 
         # Diccionario de modelos y resultados
         self.modelos = {
-            "logistic_regression": LogisticRegression(),
-            "tree": DecisionTreeClassifier(),
-            "random_forest": RandomForestClassifier(n_jobs=-1),
-            "gradient_boosting": GradientBoostingClassifier(),
-            "xgboost": xgb.XGBClassifier()
+            "logistic_regression": LogisticRegression(random_state=self.random_state),
+            "tree": DecisionTreeClassifier(random_state=self.random_state),
+            "random_forest": RandomForestClassifier(random_state=self.random_state, n_jobs=-1),
+            "gradient_boosting": GradientBoostingClassifier(random_state=self.random_state),
+            "xgboost": xgb.XGBClassifier(random_state=self.random_state)
         }
         self.resultados = {nombre: {"mejor_modelo": None, "pred_train": None, "pred_test": None} for nombre in self.modelos}
 
-    def ajustar_modelo(self, modelo_nombre, param_grid=None, cross_validation = 5):
+    def ajustar_modelo(self, modelo_nombre, param_grid=None, random_state=42, devolver_objeto=False, entrenamiento_final=False):
         """
         Ajusta el modelo seleccionado con GridSearchCV.
+        Si entrenamiento_final=True, el modelo se entrena con todo el conjunto de datos (X, y).
         """
         if modelo_nombre not in self.modelos:
             raise ValueError(f"Modelo '{modelo_nombre}' no reconocido.")
@@ -84,48 +86,69 @@ class AnalisisModelosClasificacion:
                 'min_samples_leaf': [1, 2, 4]
             },
             "random_forest": {
-                'n_estimators': [25, 50, 75],
-                'max_depth': [5, 10, 15, 20],
+                'n_estimators': [15, 25, 50],
+                'max_depth': [8, 10, 12, 15],
                 'min_samples_split': [1, 2, 5],
-                'min_samples_leaf': [2, 4, 6]
+                'min_samples_leaf': [1, 2, 4]
             },
             "gradient_boosting": {
-                'n_estimators': [100, 200],
-                'learning_rate': [0.01, 0.1, 0.2],
-                'max_depth': [3, 4, 5],
-                'min_samples_split': [2, 5, 10],
-                'min_samples_leaf': [1, 2, 4],
+                'n_estimators': [100, 150],
+                'learning_rate': [0.02, 0.2],
+                'max_depth': [3, 4],
+                'min_samples_split': [5, 10, 15],
+                'min_samples_leaf': [2, 5, 10],
                 'subsample': [0.8, 1.0]
             },
             "xgboost": {
                 'n_estimators': [100, 200],
-                'learning_rate': [0.01, 0.1, 0.2],
-                'max_depth': [3, 4, 5],
-                'min_child_weight': [1, 3, 5],
+                'learning_rate': [0.01, 0.05, 0.1],
+                'max_depth': [5, 8, 10],
+                'min_child_weight': [1, 3],
                 'subsample': [0.8, 1.0],
                 'colsample_bytree': [0.8, 1.0]
             }
         }
-
         if param_grid is None:
             param_grid = parametros_default.get(modelo_nombre, {})
 
-        # Ajuste del modelo
-        grid_search = GridSearchCV(estimator=modelo, 
-                                   param_grid=param_grid, 
-                                   cv=cross_validation, 
-                                   scoring='accuracy', n_jobs=-1)
-        
-        grid_search.fit(self.X_train, self.y_train)
-        self.resultados[modelo_nombre]["mejor_modelo"] = grid_search.best_estimator_
-        self.resultados[modelo_nombre]["pred_train"] = grid_search.best_estimator_.predict(self.X_train)
-        self.resultados[modelo_nombre]["pred_test"] = grid_search.best_estimator_.predict(self.X_test)
+        # Decidir los datos a usar según el parámetro `entrenamiento_final`
+        if entrenamiento_final:
+            print("\n **** Se está entrenando al modelo con TODO el conjunto de datos **** \n")
+            X_datos = self.X
+            y_datos = self.y
+        else:
+            X_datos = self.X_train
+            y_datos = self.y_train
 
-        # Guardar el modelo
-        with open('mejor_modelo.pkl', 'wb') as f:
-            pickle.dump(grid_search.best_estimator_, f)
+        if modelo_nombre == "logistic_regression":
+            modelo_logistica = LogisticRegression(random_state=self.random_state)
+            modelo_logistica.fit(X_datos, y_datos)
 
+            if not entrenamiento_final:
+                self.resultados[modelo_nombre]["pred_train"] = modelo_logistica.predict(self.X_train)
+                self.resultados[modelo_nombre]["pred_test"] = modelo_logistica.predict(self.X_test)
+            else:
+                self.resultados[modelo_nombre]["pred_train"] = modelo_logistica.predict(self.X)
+            self.resultados[modelo_nombre]["mejor_modelo"] = modelo_logistica
 
+            if devolver_objeto:
+                return modelo_logistica
+            
+        else:
+            # Ajuste del modelo con GridSearchCV
+            grid_search = GridSearchCV(estimator=modelo, param_grid=param_grid, cv=5, scoring='accuracy', n_jobs=-1, verbose=1)
+            grid_search.fit(X_datos, y_datos)
+            print(f"El mejor modelo es {grid_search.best_estimator_}")
+            self.resultados[modelo_nombre]["mejor_modelo"] = grid_search.best_estimator_
+
+            if not entrenamiento_final:
+                self.resultados[modelo_nombre]["pred_train"] = grid_search.best_estimator_.predict(self.X_train)
+                self.resultados[modelo_nombre]["pred_test"] = grid_search.best_estimator_.predict(self.X_test)
+            else:
+                self.resultados[modelo_nombre]["pred_train"] = grid_search.best_estimator_.predict(self.X)
+
+            if devolver_objeto:
+                return grid_search.best_estimator_
 
 
     def calcular_metricas(self, modelo_nombre):
