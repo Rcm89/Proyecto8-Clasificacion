@@ -1,7 +1,11 @@
 # Proyecto 8: Predicción de retención de empleados
 
+<<<<<<< HEAD
 ![imagen](images/foto-empleados.webp)
 
+=======
+# Proyecto: Predicción de Retención de Empleados 🏢
+>>>>>>> 03bff3ab57ad5d4dedc3170dde7c006645aa7785
 
 ## Explicación del Proyecto 🏢 🏢
 
