@@ -38,7 +38,7 @@ El proyecto está construido de la siguiente manera:
   - `4-gesition-de-outliers`
   - `5-Modelos`
 
-y la del modelo 3:
+  y la del modelo 3:
 
   - `1-eda-y-gestion-de-nulos`
   - `2-encoding`
