@@ -37,7 +37,9 @@ El proyecto está construido de la siguiente manera:
   - `3-estandarizacion`
   - `4-gesition-de-outliers`
   - `5-Modelos`
+
 y la del modelo 3:
+
   - `1-eda-y-gestion-de-nulos`
   - `2-encoding`
   - `3-estandarizacion`
