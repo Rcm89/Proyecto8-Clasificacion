@@ -65,8 +65,7 @@ y la del modelo 3:
 | *Librería para controlar parámetros del sistema* | [Sys](https://docs.python.org/3/library/sys.html)                                        |
 |                                     |
 | *Librería para creación de modelos de Machine Learning* | [scikitlearn](https://scikit-learn.org/stable/)                                         |
-| *Librería para la gestión del desbalanceo* | [imblearn](https://imbalanced-learn.org/stable/)                                          |
-|                          
+| *Librería para la gestión del desbalanceo* | [imblearn](https://imbalanced-learn.org/stable/)                                          |               
 | *Librería para la gestión de avisos*      | [warnings](https://docs.python.org/3/library/warnings.html)                                |
 
 ## Resultados
