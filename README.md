@@ -86,7 +86,7 @@ En el notebook 6-Modelos del modelo3 se presentan unas conclusiones basadas en e
 - Hacer un modelo predictivo basado en los duplicados que se eliminaron y comparar concluisones con este modelo.
 
 - Introducir mejoras en el preprocesamiento (probar un tratamiento diferente de nulos y outliers y probar otros métodos de estandarización)
-- 
+
 
 ## Autor ✒️
 
