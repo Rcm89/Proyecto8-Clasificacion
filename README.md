@@ -57,18 +57,17 @@ y la del modelo 3:
 | *Librerías para el tratamiento de datos*  | [Pandas](https://pandas.pydata.org/docs/)                                                 |
 |                                           | [Numpy](https://numpy.org/doc/)                                                           |
 |                                           | [pickle](https://docs.python.org/3/library/pickle.html)                                                           |
-| *Librerías para gestión de APIs*         | [Requests](https://pypi.org/project/requests/)                                            |
-                                                          |
+|                                                             |
 | *Librerías para gráficas*                 | [Plotly](https://plotly.com/python/)                                                      |
 |                                           | [Seaborn](https://seaborn.pydata.org)                                                     |
 |                                           | [Matplotlib](https://matplotlib.org/stable/index.html)                                    |
-|                                           | [shap](https://shap.readthedocs.io/en/latest/)                                            |
+|                                                                                    |
 | *Librería para controlar parámetros del sistema* | [Sys](https://docs.python.org/3/library/sys.html)                                        |
-| *Librería para controlar ficheros*        | [os](https://docs.python.org/3/library/os.html)                                                                  |
+|                                     |
 | *Librería para creación de modelos de Machine Learning* | [scikitlearn](https://scikit-learn.org/stable/)                                         |
 | *Librería para la gestión del desbalanceo* | [imblearn](https://imbalanced-learn.org/stable/)                                          |
-
-| *Librería para la gestión de avisos*      | [warnings](https://docs.python.org/3/library/warnings.html)                               |
+|                          
+| *Librería para la gestión de avisos*      | [warnings](https://docs.python.org/3/library/warnings.html)                                |
 
 ## Resultados
 
