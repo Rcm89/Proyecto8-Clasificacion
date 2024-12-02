@@ -1,8 +1,4 @@
 
-<div style="text-align: center;">
-  <img src="https://github.com/Hack-io-Data/Imagenes/blob/main/01-LogosHackio/logo_naranja@4x.png?raw=true" alt="logo" />
-</div>
-
 # Proyecto: Predicción de Retención de Empleados 🏢
 
 
